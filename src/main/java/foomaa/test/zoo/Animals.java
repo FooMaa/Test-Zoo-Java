@@ -49,6 +49,8 @@ public class Animals {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy = "animal", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "animal",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
     private List<Procedures> procedures = new ArrayList<>();
 }

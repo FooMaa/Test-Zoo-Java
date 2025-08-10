@@ -53,4 +53,8 @@ public class Animals {
             cascade = CascadeType.ALL,
             orphanRemoval = true)
     private List<Procedures> procedures = new ArrayList<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "zoo_id", nullable = false)
+    private Zoos zoo;
 }

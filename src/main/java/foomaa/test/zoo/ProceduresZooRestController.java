@@ -1,15 +1,19 @@
 package foomaa.test.zoo;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 
 @RestController
-@RequestMapping("/zoo/procedure")
+@RequestMapping("/zoos/procedures")
 public class ProceduresZooRestController {
     private final ProceduresRepository proceduresRepo;
 
@@ -19,29 +23,48 @@ public class ProceduresZooRestController {
     }
 
     @GetMapping
-    Iterable<Animals> getAnimals() {
-        return proceduresRepo.findAll();
+    @Transactional(readOnly = true)
+    Iterable<ProceduresDto> getProcedures() {
+        return StreamSupport.stream(proceduresRepo.findAll().spliterator(), false)
+                .map(procedure -> new ProceduresDto(
+                        procedure.getId(),
+                        procedure.getName(),
+                        procedure.getCreatedAt(),
+                        procedure.getUpdatedAt(),
+                        procedure.getAnimal()
+                ))
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
-    Optional<Animals> getAnimalById(@PathVariable Integer id) {
-        return proceduresRepo.findById(id);
+    @Transactional(readOnly = true)
+    Optional<ProceduresDto> getProceduresById(@PathVariable Integer id) {
+        return proceduresRepo.findById(id)
+                .map(procedure -> {
+                    return new ProceduresDto(
+                            procedure.getId(),
+                            procedure.getName(),
+                            procedure.getCreatedAt(),
+                            procedure.getUpdatedAt(),
+                            procedure.getAnimal()
+                    );
+                });
     }
 
     @PostMapping
-    Animals postAnimal(@RequestBody Animals animal) {
-        return proceduresRepo.save(animal);
+    Procedures postProcedure(@RequestBody Procedures procedure) {
+        return proceduresRepo.save(procedure);
     }
 
     @PutMapping("/{id}")
-    ResponseEntity<Animals> putAnimal(@PathVariable Integer id, @RequestBody Animals animal) {
+    ResponseEntity<Procedures> putProcedures(@PathVariable Integer id, @RequestBody Procedures procedure) {
         return proceduresRepo.existsById(id) ?
-                new ResponseEntity<Animals>(proceduresRepo.save(animal), HttpStatus.OK) :
-                new ResponseEntity<Animals>(proceduresRepo.save(animal), HttpStatus.CREATED);
+                new ResponseEntity<Procedures>(proceduresRepo.save(procedure), HttpStatus.OK) :
+                new ResponseEntity<Procedures>(proceduresRepo.save(procedure), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
-    void deleteAnimal(@PathVariable Integer id) {
+    void deleteProcedures(@PathVariable Integer id) {
         proceduresRepo.deleteById(id);
     }
 }

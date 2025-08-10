@@ -12,7 +12,7 @@ import java.util.stream.StreamSupport;
 
 
 @RestController
-@RequestMapping("/zoo/animals")
+@RequestMapping("/zoos/animals")
 public class AnimalsZooRestController {
     private final AnimalsRepository animalsRepo;
 

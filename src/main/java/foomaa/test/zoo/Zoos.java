@@ -1,5 +1,6 @@
 package foomaa.test.zoo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
@@ -49,5 +50,6 @@ public class Zoos {
     @OneToMany(mappedBy = "zoo",
             cascade = CascadeType.ALL,
             orphanRemoval = true)
+    @JsonIgnore // NOTE: delete later
     private List<Animals> animals = new ArrayList<>();
 }

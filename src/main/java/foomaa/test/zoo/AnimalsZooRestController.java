@@ -15,10 +15,12 @@ import java.util.stream.StreamSupport;
 @RequestMapping("/zoos/animals")
 public class AnimalsZooRestController {
     private final AnimalsRepository animalsRepo;
+    private final ZoosRepository zoosRepo;
 
     @Autowired
-    AnimalsZooRestController(AnimalsRepository newAnimalsRepository) {
-        animalsRepo = newAnimalsRepository;
+    public AnimalsZooRestController(AnimalsRepository animalsRepo, ZoosRepository zoosRepo) {
+        this.animalsRepo = animalsRepo;
+        this.zoosRepo = zoosRepo;
     }
 
     @GetMapping
@@ -32,7 +34,14 @@ public class AnimalsZooRestController {
                         animal.getType(),
                         animal.getCreatedAt(),
                         animal.getUpdatedAt(),
-                        animal.getProcedures() // Теперь коллекция доступна
+                        animal.getProcedures(),
+                        new ZoosDto(
+                                animal.getZoo().getId(),
+                                animal.getZoo().getName(),
+                                animal.getZoo().getCreatedAt(),
+                                animal.getZoo().getUpdatedAt(),
+                                null
+                        )
                 ))
                 .collect(Collectors.toList());
     }
@@ -49,13 +58,28 @@ public class AnimalsZooRestController {
                             animal.getType(),
                             animal.getCreatedAt(),
                             animal.getUpdatedAt(),
-                            animal.getProcedures()
+                            animal.getProcedures(),
+                            new ZoosDto(
+                                    animal.getZoo().getId(),
+                                    animal.getZoo().getName(),
+                                    animal.getZoo().getCreatedAt(),
+                                    animal.getZoo().getUpdatedAt(),
+                                    null
+                            )
                     );
                 });
     }
 
     @PostMapping
     Animals postAnimal(@RequestBody Animals animal) {
+        if (zoosRepo == null) {
+            return null;
+        }
+
+        Zoos zoo = zoosRepo.findById(animal.getZooId()).orElseThrow(()
+                -> new IllegalArgumentException("Zoo not found with id: " + animal.getZooId()));
+        animal.setZoo(zoo);
+
         return animalsRepo.save(animal);
     }
 

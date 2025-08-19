@@ -55,6 +55,11 @@ public class Animals {
     private List<Procedures> procedures = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "zoo_id", nullable = false)
+    @JoinColumn(name = "zoo", nullable = false)
     private Zoos zoo;
+
+    @Transient
+    @JsonProperty("zoo_id")
+    private Integer zooId;
+
 }

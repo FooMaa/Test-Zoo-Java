@@ -18,5 +18,5 @@ public class AnimalsDto {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private List<Procedures> procedures = new ArrayList<>();
-    private Zoos zoo;
+    private ZoosDto zoo;
 }

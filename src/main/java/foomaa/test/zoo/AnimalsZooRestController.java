@@ -51,7 +51,7 @@ public class AnimalsZooRestController {
     public Optional<AnimalsDto> getAnimalById(@PathVariable Integer id) {
         return animalsRepo.findById(id)
                 .map(animal -> {
-                    Hibernate.initialize(animal.getProcedures());  // Инициализация ленивой коллекции
+                    Hibernate.initialize(animal.getProcedures());
                     return new AnimalsDto(
                             animal.getId(),
                             animal.getName(),

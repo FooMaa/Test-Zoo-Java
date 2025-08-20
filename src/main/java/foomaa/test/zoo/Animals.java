@@ -61,5 +61,4 @@ public class Animals {
     @Transient
     @JsonProperty("zoo_id")
     private Integer zooId;
-
 }

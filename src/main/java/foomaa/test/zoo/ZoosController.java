@@ -2,7 +2,6 @@ package foomaa.test.zoo;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -12,12 +11,19 @@ import org.springframework.web.reactive.function.client.WebClient;
 @RequiredArgsConstructor
 public class ZoosController {
     private final ZoosRepository zoosRepo;
+    private final AnimalsRepository animalsRepo;
     private final WebClient client = WebClient.create("http://localhost:8080/zoos-web");
 
     @GetMapping("/zoos-web")
     public String getZoos(Model model) {
         model.addAttribute("zoos", zoosRepo.findAll());
         return "zoos";
+    }
+
+    @GetMapping("/zoos-web/animals")
+    public String getAnimals(Model model) {
+        model.addAttribute("animals", animalsRepo.findAll());
+        return "animals";
     }
 
     /*

@@ -1,23 +1,25 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Zoos</title>
+    <title>Animals</title>
     <meta charset="UTF-8">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 </head>
 <body>
-    <h1>Zoos List</h1>
+    <h1>Animals List</h1>
     <table>
         <thead>
             <tr>
                 <th>ID</th>
                 <th>Name</th>
+                <th>Type</th>
             </tr>
         </thead>
         <tbody>
-            <tr th:each="zoo : ${zoos}">
-                <td th:text="${zoo.id}"></td>
-                <td th:text="${zoo.name}"></td>
+            <tr th:each="animal : ${animals}">
+                <td th:text="${animal.id}"></td>
+                <td th:text="${animal.name}"></td>
+                <td th:text="${animal.type}"></td>
             </tr>
         </tbody>
     </table>
